@@ -1,0 +1,13 @@
+{
+	"type": "object",
+	"properties": {
+		"table_name": {
+			"title": "数据表名",
+			"type": "string",
+			"minLength": 1
+		}
+	},
+	"required": [
+		"table_name"
+	]
+}

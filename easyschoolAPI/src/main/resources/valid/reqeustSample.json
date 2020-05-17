@@ -1,0 +1,17 @@
+{
+	"head": {
+		"request_time": "2019-02-28T18:55:35Z",
+		"request_date": "2019-02-28",
+		"user_id": "admin",
+		"param_int": "0",
+		"param_number": 12.3,
+		"param_array": [
+			{"param_arr_mail":"xxx@163.com"},
+			{"param_arr_mail":"xxx@126.com"},
+			{"param_arr_mail":"xxx@hotmail.com"}
+		]
+	},
+	"body": {
+		"param": "xxx"
+	}
+}
