@@ -52,15 +52,15 @@ public class ComPermissionServiceImpl implements ComPermissionService {
 
 			UserEntity userInfo = JSONObject.toJavaObject(json, UserEntity.class);
 
-			result.setResCode(ResultEntity.RESULT_CODE_OK);
+			result.setStatus(ResultEntity.RESULT_CODE_OK);
 
-			result.setResInfo(userInfo);
+			result.setEntityList(userInfo);
 
 		} catch (Exception ex) {
 			log.debug(ex.getMessage());
 			ex.printStackTrace();
-			result.setResCode(ResultEntity.RESULT_CODE_ERROR);
-			result.setResInfo(null);
+			result.setStatus(ResultEntity.RESULT_CODE_ERROR);
+			result.setStatus(null);
 		}
 
 		return result;

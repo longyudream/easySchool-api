@@ -22,100 +22,100 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class AuthHandlerInterceptor implements HandlerInterceptor {
-	
+
 	@Value("${access.running-mode}")
-    private String RUN_MODE;
-	
+	private String RUN_MODE;
+
 	@Autowired
 	private Environment env;
-	
-    @Autowired
-    private ComPermissionService permissionService;
 
-    /**
-     * API执行前,通过该处理,验证用户是否有权限调用API
-     */
+	@Autowired
+	private ComPermissionService permissionService;
+
+	/**
+	 * API执行前,通过该处理,验证用户是否有权限调用API
+	 */
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		
+
 		if(handler instanceof HandlerMethod) {
-			
-			 //只拦截API
-			 HandlerMethod methodHandle = (HandlerMethod)handler;
-			 String apiName = methodHandle.getMethod().getName();//getUserInfo
-			 String controllerName = methodHandle.getBeanType().getSimpleName();//USR14Controller
-			 String accountId = request.getHeader(SystemConstants.REQUEST_HEAD_ACCOUNT);//accountId
-			
-			 String runMode = env.getProperty(RUN_MODE);
-			 
-			 if(SystemConstants.RUN_MODE_NEED_ACCESS.equals(runMode)) {
-				
-				 boolean isAccess = isAccess(accountId, controllerName, apiName);
-				 
-				 if(!isAccess) {
-					 String logmsg = "============ auth => " + controllerName + ":" + apiName + "访问被拒绝，用户编号：" + accountId + "============";
-					 log.error(logmsg);
-					 ResultEntity result = new ResultEntity("1111", "access deny");
-			         throw new ServiceException(result);
-				 }
-			 }
-			
-			 return true;
+
+			//只拦截API
+			HandlerMethod methodHandle = (HandlerMethod)handler;
+			String apiName = methodHandle.getMethod().getName();//getUserInfo
+			String controllerName = methodHandle.getBeanType().getSimpleName();//USR14Controller
+			String accountId = request.getHeader(SystemConstants.REQUEST_HEAD_ACCOUNT);//accountId
+
+			String runMode = env.getProperty(RUN_MODE);
+
+			if(SystemConstants.RUN_MODE_NEED_ACCESS.equals(runMode)) {
+
+				boolean isAccess = isAccess(accountId, controllerName, apiName);
+
+				if(!isAccess) {
+					String logmsg = "============ auth => " + controllerName + ":" + apiName + "访问被拒绝，用户编号：" + accountId + "============";
+					log.error(logmsg);
+					ResultEntity result = new ResultEntity("1111", "access deny");
+					throw new ServiceException(result);
+				}
+			}
+
+			return true;
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * 判断当前用户是有权限访问指定的API
 	 */
 	public boolean isAccess(String userId, String apiController, String apiAction) {
-		
+
 		ResultEntity resultAccess = permissionService.getAccessFunction(apiController, apiAction);
-		
-		if(ResultEntity.RESULT_CODE_OK.equals(resultAccess.getResCode()) == false) {
+
+		if(ResultEntity.RESULT_CODE_OK.equals(resultAccess.getStatus()) == false) {
 			log.error("验证失败,非法调用, 被调用的API未被配置, Controller：" + apiController + ";API:" + apiAction);
 			return false;
 		}
-		
+
 		@SuppressWarnings("unchecked")
-		List<AccessFunction> tmpList = (List<AccessFunction>)resultAccess.getResInfo();
-		
+		List<AccessFunction> tmpList = (List<AccessFunction>)resultAccess.getEntityList();
+
 		if(tmpList.size() == 0) {
-			
+
 			log.error("验证失败,非法调用, 被调用的API未被配置, Controller：" + apiController + ";API:" + apiAction);
-			
+
 			log.debug("验证失败,非法调用, 被调用的API未被配置, Controller：" + apiController + ";API:" + apiAction);
-			
+
 			return false;
-		} 
-		
+		}
+
 		AccessFunction functionItem = tmpList.get(0);
-		
+
 		if(SystemConstants.FUNCTION_AUTH_FLAG.endsWith(functionItem.getNeedAuth()) == false) {
-			
+
 			log.debug("验证成功,被调用的API不需要授权, Controller：" + apiController + ";API:" + apiAction);
-			
+
 			return true;
 		}
-		
+
 		ResultEntity resultUser  = permissionService.getUser(userId);
-		
-		if(ResultEntity.RESULT_CODE_OK.equals(resultUser.getResCode()) == false) {
-		
+
+		if(ResultEntity.RESULT_CODE_OK.equals(resultUser.getStatus()) == false) {
+
 			log.error("验证失败, 非法调用, 用户未登录,用户编号：" + userId);
-			 
+
 			return false;
 		}
-		
-		UserEntity user = (UserEntity)(resultUser.getResInfo());
-		
+
+		UserEntity user = (UserEntity)(resultUser.getEntityList());
+
 		AccessFunction item = findAccessFunction(tmpList, user.getRoleId());
-		
+
 		return (item != null);
 	}
-	
+
 	/**
 	 * 查找角色是否被授权
 	 * @param apiList
@@ -123,16 +123,16 @@ public class AuthHandlerInterceptor implements HandlerInterceptor {
 	 * @return
 	 */
 	private AccessFunction findAccessFunction(List<AccessFunction> apiList, String roleId) {
-		
+
 		for(int i = 0; i < apiList.size(); i++) {
-			
+
 			AccessFunction item = apiList.get(i);
-			
+
 			if(item.getRoleId().equals(roleId)) {
 				return item;
 			}
 		}
-		
+
 		return null;
 	}
 }

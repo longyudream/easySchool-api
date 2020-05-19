@@ -5,79 +5,124 @@ import com.czl.config.MessageListenerConfig;
 
 public class ResultEntity {
 
-	public static final String RESULT_CODE = "resCode";
+    public static final String RESULT_CODE_OK = "0";
 
-	public static final String RESULT_MESSAGE = "resMessage";
+    public static final String RESULTENTITY_CODE_OK = "0000";
 
-	public static final String RESULT_DATA = "resInfo";
+    public static final String RESULT_CODE_ERROR = "-1";
 
-	public static final String RESULT_CODE_OK = "0000";
+    public static final String DEFAULT_ERROR_MESSAGEID = "EB1";
 
-	public static final String RESULT_CODE_ERROR = "1111";
+    public static final String DEFAULT_SUCCESS_MESSAGEID = "EB1";
 
-	private String resCode;
+    private String status;
 
-	private String resMessage;
+    private String messageId;
 
-	private Object resInfo;
+    private String message;
 
-	public ResultEntity() {
-	}
+    private Object entityList;
 
-	public ResultEntity(String resCode) {
-		this.resCode = resCode;
-	}
+    public ResultEntity() {
+        this.status = ResultEntity.RESULT_CODE_ERROR;
+    }
 
-	public ResultEntity(String resCode, String resMessage) {
-		this.resCode = resCode;
-		this.resMessage = resMessage;
-	}
 
-	public ResultEntity(String resCode, String msgCode, String[] msgParams) {
-		this.resCode = resCode;
-		// 到资源文件中查找消息并设定
-		this.resMessage = MessageListenerConfig.getProperty(msgCode, msgParams);
-	}
+    /**
+     * @param
+     * @Description:
+     * @author caoyl
+     * @date 2020-05-19 11:34:59
+     */
+    public ResultEntity(String status) {
+        this.status = status;
+        this.messageId = status == ResultEntity.RESULT_CODE_OK ? ResultEntity.DEFAULT_SUCCESS_MESSAGEID
+                : ResultEntity.DEFAULT_ERROR_MESSAGEID;
 
-	public ResultEntity(String resCode, String msgCode, String[] msgParams, Object resInfo) {
-		this.resCode = resCode;
-		// 到资源文件中查找消息并设定
-		this.resMessage = MessageListenerConfig.getProperty(msgCode, msgParams);
-		this.resInfo = resInfo;
-	}
+    }
 
-	public ResultEntity(String resCode, String resMessage, Object resInfo) {
-		this.resCode = resCode;
-		this.resMessage = resMessage;
-		this.resInfo = resInfo;
-	}
+    /**
+     * 此方法仅限内部使用 message与messageid一一对应不允许是直接出入message
+     *
+     * @Description:
+     * @param
+     * @param message
+     * @author caoyl
+     * @date 2020-05-19 11:06:59
+     */
+    public ResultEntity(String internalStatus, String message) {
+        if (ResultEntity.RESULT_CODE_OK.equals(internalStatus)) {
+            internalStatus = ResultEntity.RESULTENTITY_CODE_OK;
+        }
+        this.status = internalStatus == ResultEntity.RESULTENTITY_CODE_OK ? "0" : "-1";
+        this.messageId = internalStatus == ResultEntity.RESULTENTITY_CODE_OK ? ResultEntity.DEFAULT_SUCCESS_MESSAGEID
+                : ResultEntity.DEFAULT_ERROR_MESSAGEID;
+        this.message = message;
+    }
 
-	public String toJson() {
-		return JSONObject.toJSONString(this, true);
-	}
 
-	public String getResCode() {
-		return resCode;
-	}
 
-	public void setResCode(String resCode) {
-		this.resCode = resCode;
-	}
+    /**
+     * @param status
+     * @param messageId
+     * @param msgParams
+     * @Description:
+     * @author caoyl
+     * @date 2020-05-19 11:09:00
+     */
+    public ResultEntity(String status, String messageId, String[] msgParams) {
+        this.status = status;
+        // 到资源文件中查找消息并设定
+        this.message = MessageListenerConfig.getProperty(messageId, msgParams);
+    }
 
-	public String getResMessage() {
-		return resMessage;
-	}
+    public ResultEntity(String status, String messageId, String[] msgParams, Object entityList) {
+        this.status = status;
+        // 到资源文件中查找消息并设定
+        this.message = MessageListenerConfig.getProperty(messageId, msgParams);
+        this.entityList = entityList;
+    }
 
-	public void setResMessage(String resMessage) {
-		this.resMessage = resMessage;
-	}
+    public String toJson() {
+        return JSONObject.toJSONString(this, true);
+    }
 
-	public Object getResInfo() {
-		return resInfo;
-	}
+    public String getStatus() {
+        return status;
+    }
 
-	public void setResInfo(Object resInfo) {
-		this.resInfo = resInfo;
-	}
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(String messageId) {
+        this.messageId = messageId;
+        this.message = MessageListenerConfig.getProperty(messageId, null);
+    }
+
+    public void setMessageIdAndParamsMessage(String messageId, String[] msgParams) {
+        this.messageId = messageId;
+        this.message = MessageListenerConfig.getProperty(messageId, msgParams);
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public Object getEntityList() {
+        return entityList;
+    }
+
+    public void setEntityList(Object entityList) {
+        this.entityList = entityList;
+    }
 
 }

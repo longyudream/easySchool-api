@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.czl.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @SuppressWarnings({ "rawtypes", "unchecked" })
 @RequestMapping(value = "/test")
-public class HelloController {
+public class HelloController extends BaseController {
 
 	@Autowired
 	private ComDataService comDataService;
