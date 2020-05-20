@@ -2,6 +2,9 @@ package com.czl.entity;
 
 import com.alibaba.fastjson.JSONObject;
 
+/**
+ * 请求中的所有内容
+ */
 public class RequestParamModel {
 
 	/** 操作人 */

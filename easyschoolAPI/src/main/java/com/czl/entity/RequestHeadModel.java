@@ -1,5 +1,8 @@
 package com.czl.entity;
 
+/**
+ * 请求头的模型
+ */
 public class RequestHeadModel {
 
 	/** 请求时间 */

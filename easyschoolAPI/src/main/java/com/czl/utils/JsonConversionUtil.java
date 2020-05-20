@@ -12,6 +12,11 @@ import com.alibaba.fastjson.JSONObject;
  */
 public class JsonConversionUtil {
 
+    /**
+     * 将请求头转换城json格式
+     * @param param
+     * @return
+     */
     public static JSONObject getHead(String param){
 		// 判断参数是否为空
 		if (StringUtil.isEmpty(param)) {
@@ -26,6 +31,12 @@ public class JsonConversionUtil {
 		}
     }
 
+    /**
+     * 从请求参数中获取某个节点
+     * @param param
+     * @param node 节点名
+     * @return
+     */
     public static String getHeadNode(String param, String node){
         JSONObject head = getHead(param);
         if (head.containsKey(node)){
@@ -35,6 +46,12 @@ public class JsonConversionUtil {
         }
     }
 
+    /**
+     * 从json格式的字符串中获取多个节点的信息 封装在map中
+     * @param param
+     * @param node
+     * @return
+     */
     public static Map getHeadNode(String param, String... node){
         JSONObject head = getHead(param);
         Map<Object, Object> map = new HashMap<>();
@@ -44,6 +61,11 @@ public class JsonConversionUtil {
         return map;
     }
 
+    /**
+     * 获取请求体Body的信息
+     * @param param
+     * @return
+     */
     public static JSONObject getBody(String param){
         if (StringUtil.isEmpty(param)){
             return null;
@@ -51,18 +73,21 @@ public class JsonConversionUtil {
         return ((JSONObject) JSONObject.parse(param)).getJSONObject("body");
     }
 
+    /**
+     * 将请求信息转化为json对象
+     * @param param
+     * @return
+     */
     public static JSONObject getParam(String param){
         return (JSONObject) JSONObject.parse(param);
     }
 
-    public static JSONObject getBodyData(String param){
-        return getBody(param).getJSONObject("DATA");
-    }
-
-    public static JSONObject getBodyCondition(String param){
-        return getBody(param).getJSONObject("condition");
-    }
-
+    /**
+     * 获取Body中携带的多个参数,封装在Map中
+     * @param param
+     * @param columnName
+     * @return
+     */
     public static Map getBodyNode(String param, String... columnName){
         JSONObject body = getBody(param);
         Map<Object, Object> map = new HashMap<>();
@@ -70,43 +95,5 @@ public class JsonConversionUtil {
             map.put(columnName[i],body.getString(columnName[i]));
         }
         return map;
-    }
-
-    public static Map getBodyNode(Map jsonMap, String... columnName) {
-        Map<Object, Object> map = new HashMap<>();
-        for (int i = 0; i < columnName.length; i++) {
-            map.put(columnName[i], jsonMap.get(columnName[i]));
-        }
-        return map;
-    }
-
-    public static Map getBodyDataNode(String param, String... columnName){
-        JSONObject data = getBodyData(param);
-        Map<Object, Object> map = new HashMap<>();
-        for (int i = 0; i < columnName.length; i++) {
-            map.put(columnName[i],data.getString(columnName[i]));
-        }
-        return map;
-    }
-
-    public static Map getBodyConditionNode(String param, String... columnName){
-        JSONObject condition = getBodyCondition(param);
-        Map<Object, Object> map = new HashMap<>();
-        for (int i = 0; i < columnName.length; i++) {
-            map.put(columnName[i],condition.getString(columnName[i]));
-        }
-        return map;
-    }
-
-    public static Map getAllBodyNode(String param){
-        return JSONObject.parseObject(getBody(param).toJSONString(), HashMap.class);
-    }
-
-    public static Map getAllBodyDataNode(String param){
-        return JSONObject.toJavaObject(getBodyData(param), HashMap.class);
-    }
-
-    public static Map getAllBodyConditionNode(String param){
-        return JSONObject.toJavaObject(getBodyCondition(param), HashMap.class);
     }
 }

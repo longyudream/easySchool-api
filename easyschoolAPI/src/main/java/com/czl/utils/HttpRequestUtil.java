@@ -25,6 +25,9 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
+/**
+ * 模拟http客户端发送请求
+ */
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class HttpRequestUtil {
 

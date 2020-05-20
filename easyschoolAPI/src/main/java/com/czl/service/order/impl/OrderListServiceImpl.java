@@ -1,6 +1,7 @@
 package com.czl.service.order.impl;
 
 import com.czl.entity.RequestParamModel;
+import com.czl.entity.ResultEntity;
 import com.czl.service.order.OrderListService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,12 +16,15 @@ import org.springframework.stereotype.Service;
 public class OrderListServiceImpl implements OrderListService {
     /**
      * 获取订单列表数据
-      * @param paramModel 传入数据模型
+      * @param param 传入数据
      * @return
      */
     @Override
-    public Object getOrderListController(RequestParamModel paramModel) {
+    public ResultEntity getOrderList(String param) {
+        ResultEntity resultEntity = new ResultEntity();
 
-        return null;
+
+        
+        return resultEntity;
     }
 }
