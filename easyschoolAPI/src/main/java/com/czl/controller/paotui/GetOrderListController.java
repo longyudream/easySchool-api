@@ -31,7 +31,7 @@ public class GetOrderListController extends BaseController {
         ResultEntity resultEntity = new ResultEntity();
         try {
             log.debug("================================================开始进行格式校验===================================================");
-            resultEntity = this.inputValid(param, "getOrderList");
+            resultEntity = this.inputValid(param, "validGetOrderList");
             // 判断校验结果
             if (ResultEntity.RESULT_CODE_ERROR == resultEntity.getStatus()) {
                 return resultEntity;

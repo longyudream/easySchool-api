@@ -6,9 +6,9 @@ import java.util.Map;
 import com.alibaba.fastjson.JSONObject;
 
 /**
- * 处理前端传来的Json字符串
- * @author qmy
- * @since 2019/4/10 10:58
+ * 对前端传来的jason参数处理
+ * @author 陈正龙
+ * @date 2020/5/20 17:42
  */
 public class JsonConversionUtil {
 
