@@ -1,5 +1,7 @@
 package com.czl.mapper.business.order;
 
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 import java.util.Map;
 
@@ -14,5 +16,5 @@ public interface OrderMapper {
      * @author 陈正龙
      * @date 2020/5/20 18:14
      */
-    List getOrderList(Map condition);
+    List getOrderList(@Param("params") Map condition);
 }

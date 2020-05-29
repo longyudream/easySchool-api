@@ -63,14 +63,13 @@ public abstract class BaseController {
                     JSONObject jsonObject = JSONObject.parseObject(validJson);
                     String errorMessage = jsonObject.getString("message");
                     log.debug("Json验证未通过：[" + errorMessage + "]！");
-                    return new ResultEntity(ResultEntity.RESULT_CODE_ERROR, "EBC00IF000001",
+                    return new ResultEntity(ResultEntity.RESULT_CODE_ERROR, "ApiMsg3001",
                             new String[] { errorMessage }, null);
                 }
             }
-        } catch (Exception e) {// TODO 申请发号
+        } catch (Exception e) {
             log.debug("=============json参数非法");
-            // ApiMsg7004=非法的json参数！
-            ResultEntity entity = new ResultEntity("7004", "ApiMsg7004", null);
+            ResultEntity entity = new ResultEntity(ResultEntity.RESULT_CODE_ERROR, "ApiMsg3002", null);
             log.debug(entity.toJson());
             return entity;
         }

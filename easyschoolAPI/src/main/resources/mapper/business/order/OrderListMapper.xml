@@ -4,8 +4,25 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.czl.mapper.business.order.OrderMapper">
 
-<!--    查询订单列表-->
+<!--    查询订单一览列表-->
     <select id="getOrderList" parameterType="map" resultType="java.util.HashMap">
+        SELECT
+        ro.o_type
+        ,ro.o_getAddress
+        ,ro.o_sendAddress
+        ,ro.o_sexLimit
+        FROM t_runorder ro
+        LEFT JOIN t_user_runorder uro ON ro.o_id = uro.o_id
+        LEFT join t_user ur ON  ur.u_uid = uro.u_uid
+        WHERE 1=1
+        <if test="params != null">
+            <foreach collection="params.keys" item="k" index="index"
+                     open="" separator="" close="">
+                <if test="params[k] != null $$ params[k] != '' ">
+                    and ${k} = '${params[k]}'
+                </if>
+            </foreach>
+        </if>
 
     </select>
 </mapper>

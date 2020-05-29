@@ -91,6 +91,9 @@ public class JsonConversionUtil {
     public static Map getBodyNode(String param, String... columnName){
         JSONObject body = getBody(param);
         Map<Object, Object> map = new HashMap<>();
+        if (body == null){
+            return map;
+        }
         for (int i = 0; i < columnName.length; i++) {
             map.put(columnName[i],body.getString(columnName[i]));
         }

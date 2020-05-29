@@ -11,7 +11,7 @@ public class EncryptorTest {
 
 	public void jasyptTest() {
 		String password = "KSve/0YqtrXqx3WKPza7Ww==";
-		jasyptEncode(password, "jdbc:log4jdbc:mysql://127.0.0.1:5820/paotui");
+		jasyptEncode(password, "jdbc:log4jdbc:log4jdbc:mysql://127.0.0.1:5820/paotui?serverTimezone=UTC");
 		jasyptEncode(password, "root");
 		jasyptEncode(password, "root");
 	}

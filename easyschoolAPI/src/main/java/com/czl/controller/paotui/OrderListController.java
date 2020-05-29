@@ -20,32 +20,31 @@ import static com.czl.entity.ResultEntity.RESULT_CODE_ERROR;
 @RestController
 @Slf4j
 @SuppressWarnings({"rawtypes", "unchecked"})
-public class GetOrderListController extends BaseController {
+public class OrderListController extends BaseController {
 
     @Autowired
     private OrderListService orderListService;
 
     @PostMapping("/getOrderList")
     public Object getOrderListController(@RequestBody String param) {
-        log.debug("进入到getOrderListController中....");
+        log.debug("进入到OrderListController....................");
         ResultEntity resultEntity = new ResultEntity();
         try {
+            log.debug("传到后台的数据是: "+ param);
             log.debug("================================================开始进行格式校验===================================================");
             resultEntity = this.inputValid(param, "validGetOrderList");
             // 判断校验结果
-            if (ResultEntity.RESULT_CODE_ERROR == resultEntity.getStatus()) {
+            if (ResultEntity.RESULT_CODE_ERROR .equals(resultEntity.getStatus()) ) {
                 return resultEntity;
             }
             log.debug("================================================格式校验通过===================================================");
             resultEntity = orderListService.getOrderList(param);
-            log.debug("controller层准备返回的数据是: "+ resultEntity);
+           log.debug("controller层准备返回的数据是: "+ resultEntity);
         } catch (Exception e) {
-            // EBC00IF000000=失败！
             log.debug("程序内部出现异常.... ");
             resultEntity.setStatus(ResultEntity.RESULT_CODE_ERROR);
-            resultEntity.setMessageId("EBC00IF000000");
+            resultEntity.setMessageId("ApiMsg7001");
             return resultEntity;
-
         }
 
         return resultEntity;
